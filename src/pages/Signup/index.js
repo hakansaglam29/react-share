@@ -51,6 +51,7 @@ export function Signup() {
               name="password"
               label="Password"
               variant="outlined"
+              type="Password"
               fullWidth
               value={formik.values.password}
               onChange={formik.handleChange}
