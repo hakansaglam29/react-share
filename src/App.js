@@ -1,20 +1,10 @@
-import {Signup} from './pages/Signup'
-import {MenuAppBar} from './pages/Navbar'
-
+import AppRouter from "./Router/router";
+import AuthContextProvider from "./context/AuthContext";
 function App() {
   return (
-    <div className="App">
-      <MenuAppBar/>
-      <Signup/>
-     {
-
-       //Route
-       //Signin
-       //Signup
-       //forgotpassword
-       //....
-     }
-    </div>
+    <AuthContextProvider>
+      <AppRouter />
+    </AuthContextProvider>
   );
 }
 
