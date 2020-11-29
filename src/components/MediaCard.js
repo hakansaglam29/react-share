@@ -12,12 +12,18 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
+  root:{
+    textOverflow:'ellipsis',
   },
   media: {
-    height: 140,
+    height: 300,
   },
+  name: {
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+  }
+
 });
 
 export function MediaCard({ userImage, userName, userEmail, id }) {
@@ -29,10 +35,10 @@ export function MediaCard({ userImage, userName, userEmail, id }) {
       <CardActionArea onClick={() => history.push(`/user/${id}`)}>
         <CardMedia className={classes.media} image={userImage} />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography className={classes.name} gutterBottom variant="h6" component="h2">
             {userName}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography  className={classes.name} variant="body2" color="textSecondary" component="p">
             {userEmail}
           </Typography>
         </CardContent>

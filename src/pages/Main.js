@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Grid, capitalize } from "@material-ui/core";
 import axios from "axios";
-import { MediaCard } from "../../components/MediaCard";
+import { MediaCard } from "../components";
 
 const stylesFunc = makeStyles((theme) => ({
   wrapper: {
-    marginTop: "10rem",
-    height: "calc(100vh - 19.0625rem)",
-    textAlign: "center",
-  },
-  avatar: {
-    margin: "1rem auto",
-    backgroundColor: theme.palette.secondary.main,
+    marginTop: "3rem",
+    marginBottom:"2rem",
+    maxWidth:"80%",
+    textAlign:'center',
+    alignItems:'center',
   },
 }));
 
@@ -35,11 +33,11 @@ export function Main() {
   }, []);
 
   return (
-    <Container className={mainStyles.wrapper}>
-      <Grid container spacing={1}>
+    <Container className={mainStyles.wrapper} >
+      <Grid container spacing={2}>
         {userList?.map((user) => {
           return (
-            <Grid item sm={4} xs={6} key={user?.id}>
+            <Grid item lg={3} md={4} sm={6} xs={12} key={user?.id}>
               <MediaCard
                 id={user.id}
                 userImage={user?.picture}

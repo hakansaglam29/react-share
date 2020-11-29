@@ -2,7 +2,7 @@ import React from "react";
 import { Button, TextField, Grid, Container, Avatar, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
-import firebase from "../../firebase/firebase.util";
+import firebase from "../firebase/firebase.util";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
