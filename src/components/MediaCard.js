@@ -1,7 +1,6 @@
 import React from "react";
-import {useHistory} from "react-router-dom"
-import PropTypes from "prop-types"
-
+import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -12,42 +11,55 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-  root:{
-    textOverflow:'ellipsis',
+  root: {
+    maxWidth: 300,
+    margin: "auto",
+    //marginRight:'10px',
+    marginBottom: "30px",
+    transition: "0.3s",
+    boxShadow: "0 8px 40px -12px rgba(0,0,0,0.5)",
+    "&:hover": {
+      transform: "scale(1.02)",
+      boxShadow: "0 20px 70px -13px rgba(0,0,0,0.5)",
+    },
   },
   media: {
     height: 300,
+    width: "auto",
+    resizeMode: "contain",
   },
-  name: {
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-  }
-
 });
 
-export function MediaCard({ userImage, userName, userEmail, id }) {
+export default function MediaCard({ id, userImage, userName, userEmail }) {
   const classes = useStyles();
   const history = useHistory();
 
+  const handleProfileClick = () => {
+    history.push(`/user/${id}`);
+  };
+
+  const handleUserPostClick = () => {
+    history.push(`/user/${id}/post`);
+  };
+
   return (
     <Card className={classes.root}>
-      <CardActionArea onClick={() => history.push(`/user/${id}`)}>
+      <CardActionArea onClick={handleProfileClick}>
         <CardMedia className={classes.media} image={userImage} />
         <CardContent>
-          <Typography className={classes.name} gutterBottom variant="h6" component="h2">
+          <Typography noWrap gutterBottom variant="h6" component="h2">
             {userName}
           </Typography>
-          <Typography  className={classes.name} variant="body2" color="textSecondary" component="p">
+          <Typography noWrap variant="body2" color="textSecondary" component="p">
             {userEmail}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleProfileClick}>
           View Full Profile
         </Button>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleUserPostClick}>
           View User Posts
         </Button>
       </CardActions>
@@ -56,8 +68,8 @@ export function MediaCard({ userImage, userName, userEmail, id }) {
 }
 
 MediaCard.propTypes = {
-    id: PropTypes.string.isRequired,
-    userImage: PropTypes.string,
-    userName: PropTypes.string,
-    userEmail: PropTypes.string,
-}
+  id: PropTypes.string.isRequired,
+  userImage: PropTypes.string,
+  userName: PropTypes.string,
+  userEmail: PropTypes.string,
+};

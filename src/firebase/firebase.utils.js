@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import { customErrorHandler } from "../helper/customErrorHandler";
 //firestore
 
 const devConfig = {
@@ -18,17 +19,21 @@ const config = process.env.NODE_ENV === "development" ? devConfig : prodConfig;
 
 class Firebase {
   constructor() {
-    //TODO: add initialize check
-    firebase.initializeApp(config);
+    if (firebase.apps.length === 0) {
+      firebase.initializeApp(config);
+    }
     this.firebaseAuth = firebase.auth();
   }
-
   // register registerWithEmailAndPassword
   async register(displayName, email, password) {
-    await this.firebaseAuth.createUserWithEmailAndPassword(email, password);
-    this.firebaseAuth.currentUser.updateProfile({
-      displayName,
-    });
+    try {
+      await this.firebaseAuth.createUserWithEmailAndPassword(email, password);
+      this.firebaseAuth.currentUser.updateProfile({
+        displayName,
+      });
+    } catch (err) {
+      console.log("F. Error:", err);
+    }
   }
 
   // sign in/up with google GoogleAuthProvider
@@ -39,8 +44,12 @@ class Firebase {
   }
 
   // login  signInWithEmailAndPassword
-  signIn(email, password) {
-    this.firebaseAuth.signInWithEmailAndPassword(email, password);
+  async signIn(email, password) {
+    try {
+      await this.firebaseAuth.signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      return customErrorHandler(error);
+    }
   }
 
   // logout signOut
@@ -49,6 +58,14 @@ class Firebase {
   }
 
   // forgot password sendPasswordResetEmail
+  async forgotPassword(email) {
+    try {
+      await this.firebaseAuth.sendPasswordResetEmail(email);
+      window.location.href = "/";
+    } catch (error) {
+      return customErrorHandler(error);
+    }
+  }
 }
 
 export default new Firebase();

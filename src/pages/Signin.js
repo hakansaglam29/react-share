@@ -1,11 +1,18 @@
-import React from "react";
-import { Button, TextField, Grid, Container, Avatar, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import {
+  Button,
+  TextField,
+  Grid,
+  Container,
+  Avatar,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
-import firebase from "../firebase/firebase.util";
+import firebase from "../firebase/firebase.utils";
 import { Formik } from "formik";
 import * as Yup from "yup";
-
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 const signInValidationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid Email").required("Email is required!!"),
   password: Yup.string()
@@ -15,14 +22,24 @@ const signInValidationSchema = Yup.object().shape({
 
 const stylesFunc = makeStyles((theme) => ({
   wrapper: {
-    marginTop: "10rem",
+    marginTop: "3rem",
     height: "calc(100vh - 19.0625rem)",
     textAlign: "center",
+    marginBottom:"9rem",
   },
   avatar: {
     margin: "1rem auto",
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
+  signIn: {
+    margin: "1rem",
+  }, 
+  register: {
+    textDecoration: 'none',
+    fontWeight: '600',
+    paddingLeft : '0.5rem'
+  }
+  
 }));
 
 const initialValues = {
@@ -30,16 +47,26 @@ const initialValues = {
   password: "",
 };
 
-export function Signin() {
+function Signin() {
+  const [loginError, setLoginError] = useState(null);
+  const history = useHistory();
   const signinStyles = stylesFunc();
 
   const handleGoogleButtonClick = () => {
     firebase.useGoogleProvider();
+    alert('You are succesfully logged in!');
+    history.push('/');
   };
 
   const handleFormSubmit = (values) => {
     // alert(JSON.stringify(values, null, 2));
-    firebase.signIn(values.email, values.password);
+    firebase.signIn(values.email, values.password).then((res) => {
+      if (res) {
+        setLoginError(res);
+        return;
+      }
+      history.push("/");
+    });
   };
 
   return (
@@ -47,7 +74,9 @@ export function Signin() {
       <Avatar className={signinStyles.avatar}>
         <LockOutlinedIcon />
       </Avatar>
-      <Typography variant="h4">Sign In</Typography>
+      <Typography className={signinStyles.signIn} variant="h4">
+        Sign In
+      </Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={signInValidationSchema}
@@ -102,9 +131,25 @@ export function Signin() {
                 </Button>
               </Grid>
             </Grid>
+            <p style={{ textAlign: "center", color: "red" }}>
+              <small>{loginError}</small>
+            </p>
+            {/* 
+            //TODO: Add register & forgot password text & links
+            */}
           </form>
         )}
       </Formik>
+      <p>
+        Don't have an account?      
+        <a className = {signinStyles.register} href="/register">Register</a>
+      </p>
+            
+      <p>
+         <a className = {signinStyles.register} href="/forgot-password">Forgot Password?</a>
+      </p>
     </Container>
   );
 }
+
+export default Signin;
